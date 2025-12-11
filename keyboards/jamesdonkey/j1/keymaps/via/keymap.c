@@ -16,6 +16,8 @@
 
 #include QMK_KEYBOARD_H
 #include "common.h"
+#include "transport.h"
+#include "wireless.h"
 
 enum layers {
     MAC_BASE,
@@ -23,6 +25,11 @@ enum layers {
     WIN_BASE,
     WIN_FN,
 };
+
+// RGB timeout implementation for wired mode
+static uint32_t rgb_idle_timer = 0;
+static bool rgb_was_enabled = true;
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MAC_BASE] = LAYOUT_ansi_82(
@@ -57,9 +64,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,            _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  _______,  _______,  _______,  _______,  _______,
         _______,  GU_TOGG,  _______,                                _______,                      _______,  _______,  _______,  _______,  _______,  _______)
 };
-
 // clang-format on
+
+void matrix_scan_user(void) {
+    // Only manage RGB timeout in wired/USB mode
+    // In wireless mode, let the existing LPM code handle it
+    if (get_transport() == TRANSPORT_USB) {
+        if (timer_elapsed32(rgb_idle_timer) > 600000) {  // 10 mins of inactivity
+            if (rgb_matrix_is_enabled()) {
+                rgb_matrix_disable_noeeprom();
+                rgb_was_enabled = false;
+            }
+        }
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        // Reset timer on any keypress
+        rgb_idle_timer = timer_read32();
+        
+        // Turn RGB back on if it was turned off by timeout
+        if (!rgb_was_enabled && !rgb_matrix_is_enabled()) {
+            rgb_matrix_enable_noeeprom();
+            rgb_was_enabled = true;
+        }
+    }
 
     if (!process_record_common(keycode, record)) {
         return false;

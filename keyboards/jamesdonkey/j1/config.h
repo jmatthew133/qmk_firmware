@@ -48,10 +48,17 @@
 #    define SNLED27351_CURRENT_TUNE \
         { 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40 }
 
+ /*
+  * Below two configs added in an attempt to get the J1 to auto shut off RGBs in wired mode.
+  * Unfortunately neither worked, but leaving here to show we tried.
+  * The only thing that worked was custom code in keymaps/via/keymap.c
+  */
+
 /* Auto-off after 10 minutes of inactivity */
 #    define RGB_MATRIX_TIMEOUT 600000
 /* Also turn off when USB host suspends */
 #    define RGB_DISABLE_WHEN_USB_SUSPENDED
+
 /* Allow shutdown of led driver to save power */
 #    define RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE
 /* Turn off backlight on low brightness to save power */
