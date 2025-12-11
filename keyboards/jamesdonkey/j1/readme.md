@@ -2,6 +2,8 @@
 
 ![JamesDonkey J1]
 
+This fork adds functionality for Auto-off RGB backlights in wired mode after 10 mins of inactivity on the keyboard. Previously, this functionality only worked in wireless (bluetooth/2.4ghz) modes. 
+
 A customizable 75% low profile keyboard.
 
 * Keyboard Maintainer: [James Donkey](https://github.com/james-donkey)
