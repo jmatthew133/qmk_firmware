@@ -46,8 +46,10 @@
 #    define SNLED27351_CURRENT_TUNE \
         { 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40 }
 
-/* Set to infinit, which is use in USB mode by default */
-#    define RGB_MATRIX_TIMEOUT RGB_MATRIX_TIMEOUT_INFINITE
+/* Auto-off after 10 minutes of inactivity */
+#    define RGB_MATRIX_TIMEOUT 600000
+/* Also turn off when USB host suspends */
+#    define RGB_DISABLE_WHEN_USB_SUSPENDED
 /* Allow shutdown of led driver to save power */
 #    define RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE
 /* Turn off backlight on low brightness to save power */
