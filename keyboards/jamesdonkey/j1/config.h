@@ -16,7 +16,7 @@
 
 #pragma once
 
-#define DEBOUNCE 12
+#define DEBOUNCE 10
 
 /* I2C Driver Configuration */
 #define I2C1_SCL_PIN B8
